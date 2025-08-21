@@ -32,7 +32,7 @@ export const createAgent = async (req, res) => {
 
     if (!name || !email || !mobile || !password) return Response(400, false, "All fields are required", res);
 
-    const existingAgent = await findOne({ email });
+    const existingAgent = await agentModel.findOne({ email });
     if (existingAgent) return Response(400, false, "Agent already exits", res);
 
     const hashPassword = await bcrypt.hash(password, 10);

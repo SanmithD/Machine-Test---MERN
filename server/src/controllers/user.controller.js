@@ -3,31 +3,31 @@ import { userModel } from "../models/user.model.js";
 import { Response } from "../utils/response.util.js";
 import { generateToken } from "../utils/utils.js";
 
-export const signup = async(req, res) =>{
-    try {
-        const { email, password } = req.body;
-        if(!email || !password) return Response(400, false, "All fields are required", res);
+// export const signup = async(req, res) =>{
+//     try {
+//         const { email, password } = req.body;
+//         if(!email || !password) return Response(400, false, "All fields are required", res);
 
-        const user = await userModel.findOne({ email }).select('-password');
-        if(user) return Response(400, false, "User already exists", res);
+//         const user = await userModel.findOne({ email }).select('-password');
+//         if(user) return Response(400, false, "User already exists", res);
 
-        const hashPassword = await bcrypt.hash(password, 10);
-        const newUser = new userModel({
-            email,
-            password: hashPassword,
-        });
+//         const hashPassword = await bcrypt.hash(password, 10);
+//         const newUser = new userModel({
+//             email,
+//             password: hashPassword,
+//         });
 
-        if(!newUser) return Response(400, false, "Invalid request", res);
-        await newUser.save();
+//         if(!newUser) return Response(400, false, "Invalid request", res);
+//         await newUser.save();
 
-        const token = generateToken(newUser._id, res);
+//         const token = generateToken(newUser._id, res);
 
-        Response(201, true, "User created", res, newUser, token );
-    } catch (error) {
-        console.log(error);
-        return Response(500, false, "Server Error", res);
-    }
-}
+//         Response(201, true, "User created", res, newUser, token );
+//     } catch (error) {
+//         console.log(error);
+//         return Response(500, false, "Server Error", res);
+//     }
+// }
 
 export const login = async(req, res) =>{
     try {
