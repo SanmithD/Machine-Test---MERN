@@ -81,6 +81,18 @@ export const getDistributionById = async (req, res) => {
   }
 };
 
+export const deleteDistribution = async(req, res) =>{
+  try {
+    const response = await listModel.findByIdAndDelete(req.params.id);
+    if(!response) Response(404, false, "Not found", res);
+
+    Response(200, true, "Deleted", res);
+  } catch (error) {
+    console.log(error);
+    Response(500, false, "Server error", res)
+  }
+}
+
 const distributeItems = (items, agents) => {
   const distributions = [];
   const itemsPerAgent = Math.floor(items.length / agents.length);

@@ -63,3 +63,15 @@ export const profile = async(req, res) =>{
         return Response(500, false, "Server error", res);
     }
 }
+
+export const logout = async (req, res) => {
+  try {
+    res.cookie("jwt", "", {
+      maxAge: 0,
+    });
+    Response(200, true, 'Logout successfully', res);
+  } catch (error) {
+    console.log(error.message);
+    return Response(500, false, 'Server error', res)
+  }
+};

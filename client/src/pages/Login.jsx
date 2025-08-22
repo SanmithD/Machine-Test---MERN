@@ -1,8 +1,10 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { UseAuthStore } from "../store/UseAuthStore";
 
 function Login() {
+  const navigate = useNavigate();
   const { isLoading, login } = UseAuthStore();
   const [isVisible, setIsVisible] = useState(false);
   const [formData, setFormData] = useState({
@@ -18,56 +20,74 @@ function Login() {
     }));
   };
 
-  const handleLogin = async () => {
-    await login(formData);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    await login(formData, navigate);
   };
 
   return (
-    <div className="h-screen flex justify-center items-center flex-col">
-      <h1 className="text-3xl font-bold my-3">Login</h1>
-      <div className="h-[300px] md:h-[400px] md:w-[500px] w-fit flex border rounded-lg">
-        <div className="border flex flex-1/2 flex-col justify-center items-center space-y-6 px-2 md:px-6">
-          <div className="h-fit w-full space-y-2">
-            <p className="text-2xl font-medium">Email :</p>
-            <input
-              type="email"
-              className="h-fit w-full py-2.5 pl-2 border outline-0 rounded"
-              value={formData.email}
-              onChange={handleChange}
-              name="email"
-              placeholder="example@gmail.com"
-            />
-          </div>
-
-          <div className="h-fit w-full space-y-2">
-            <p className="text-2xl font-medium">Password :</p>
-            <div className="flex items-center relative">
+    <div className="h-screen w-full flex items-center justify-center px-4">
+      <div className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col md:flex-row w-full max-w-4xl">
+        <div className="flex-1 flex flex-col justify-center items-center p-6 md:p-10">
+          <h1 className="text-3xl font-bold mb-6 text-gray-800">Admin Login</h1>
+          <form onSubmit={handleLogin} className="w-full text-black max-w-md space-y-5">
+            <div className="w-full">
+              <label className="block text-gray-700 mb-2 text-sm font-medium">
+                Email
+              </label>
               <input
-                type={isVisible ? "text" : "password"}
-                className="h-fit w-full py-2.5 pl-2 relative border outline-0 rounded"
+                type="email"
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none transition"
+                value={formData.email}
                 onChange={handleChange}
-                value={formData.password}
-                name="password"
-                placeholder="Enter your password"
+                name="email"
+                placeholder="example@gmail.com"
+                required
               />
-              <button
-                type="button"
-                className="absolute right-2"
-                onClick={() => setIsVisible(!isVisible)}
-              >
-                {isVisible ? <EyeOff /> : <Eye />}
-              </button>
             </div>
-          </div>
 
-          <button
-            onClick={handleLogin}
-            className="w-fit px-5 py-1 bg-blue-500 text-2xl font-medium tracking-wide rounded-md cursor-pointer hover:bg-blue-800"
-          >
-            {isLoading ? "Loading..." : "Login"}
-          </button>
+            <div className="w-full">
+              <label className="block text-gray-700 mb-2 text-sm font-medium">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={isVisible ? "text" : "password"}
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none transition"
+                  onChange={handleChange}
+                  value={formData.password}
+                  name="password"
+                  placeholder="Enter your password"
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute right-4 top-2 -translate-y-1/2 text-gray-600"
+                  onClick={() => setIsVisible(!isVisible)}
+                >
+                  {isVisible ? <EyeOff /> : <Eye />}
+                </button>
+              </div>
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-2 bg-blue-500 text-white font-semibold text-lg rounded-lg shadow hover:bg-blue-600 transition disabled:opacity-70"
+            >
+              {isLoading ? "Loading..." : "Login"}
+            </button>
+          </form>
         </div>
-        <div className="w-[100px]"></div>
+
+        <div className="hidden md:flex md:w-1/2 bg-blue-50 items-center justify-center p-6">
+          <img
+            src="/loginPng.png"
+            alt="login illustration"
+            className="w-3/4 max-h-[300px] object-contain"
+          />
+        </div>
       </div>
     </div>
   );

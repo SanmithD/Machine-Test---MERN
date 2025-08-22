@@ -24,7 +24,6 @@ function UpdateAgent({ data, id }) {
     <div>
       <h1 className="text-2xl font-bold mb-6 text-center">Update Agent</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Name */}
         <div>
           <label className="block text-sm font-medium mb-1">Name</label>
           <input
@@ -36,7 +35,6 @@ function UpdateAgent({ data, id }) {
             required
           />
         </div>
-        {/* Email */}
         <div>
           <label className="block text-sm font-medium mb-1">Email</label>
           <input
@@ -48,7 +46,6 @@ function UpdateAgent({ data, id }) {
             required
           />
         </div>
-        {/* Mobile */}
         <div>
           <label className="block text-sm font-medium mb-1">Mobile</label>
           <input
@@ -60,7 +57,6 @@ function UpdateAgent({ data, id }) {
             required
           />
         </div>
-        {/* Password */}
         <div>
           <label className="block text-sm font-medium mb-1">Password</label>
           <input
@@ -72,10 +68,9 @@ function UpdateAgent({ data, id }) {
             placeholder="Enter new password"
           />
         </div>
-        {/* Submit */}
         <button
           type="submit"
-          className="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+          className="w-full py-2 cursor-pointer bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
           disabled={isLoading}
         >
           {isLoading ? "Saving..." : "Update Agent"}

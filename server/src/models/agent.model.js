@@ -17,7 +17,7 @@ const agentSchema = new Schema({
   mobile: {
     type: String,
     required: [true, 'Mobile number is required'],
-    match: [/^\+[1-9]\d{1,14}$/, 'Please enter a valid mobile number with country code']
+    match: [/^\+[1-9]\d{0,3}[- ]?\d{4,14}$/, 'Please enter a valid mobile number with country code']
   },
   password: {
     type: String,

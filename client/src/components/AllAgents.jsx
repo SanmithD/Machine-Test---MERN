@@ -1,10 +1,10 @@
-import { Edit2, Phone } from "lucide-react";
+import { Edit2, Phone, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { UseAgentStore } from "../store/UseAgentStore";
 import UpdateAgent from "./UpdateAgent";
 
 function AllAgents() {
-  const { getAllAgents, agents, isLoading } = UseAgentStore();
+  const { getAllAgents, agents, isLoading, deleteAgent } = UseAgentStore();
   const [selectedAgent] = useState(null);
 
   useEffect(() => {
@@ -39,8 +39,10 @@ function AllAgents() {
                     {new Date(agent.createdAt).toLocaleDateString()}
                   </span>
                 </div>
+
+                <div className="flex justify-between " >
                 <button
-                  className="btn btn-sm mt-3"
+                  className="btn btn-sm mt-3 w-fit "
                   onClick={() =>
                     document
                       .getElementById(`update_modal_${agent._id}`)
@@ -49,6 +51,17 @@ function AllAgents() {
                 >
                   <Edit2 size={16} /> Edit
                 </button>
+                <button
+                  className="btn btn-sm mt-3 w-fit "
+                  onClick={() =>
+                    document
+                      .getElementById(`delete_modal_${agent._id}`)
+                      .showModal()
+                  }
+                >
+                  <Trash2 size={16} /> Delete
+                </button>
+                </div>
               </div>
 
               <dialog id={`update_modal_${agent._id}`} className="modal">
@@ -56,6 +69,17 @@ function AllAgents() {
                   <UpdateAgent data={agent} id={agent._id} />
                   <div className="modal-action">
                     <form method="dialog">
+                      <button className="btn">Close</button>
+                    </form>
+                  </div>
+                </div>
+              </dialog>
+              <dialog id={`delete_modal_${agent._id}`} className="modal">
+                <div className="modal-box max-w-lg">
+                  <h1>Are sure want to delete agent ?</h1>
+                  <div className="modal-action">
+                    <form method="dialog">
+                      <button className="btn bg-red-500" onClick={()=>deleteAgent(agent._id)} >Delete</button>
                       <button className="btn">Close</button>
                     </form>
                   </div>

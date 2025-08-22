@@ -52,4 +52,20 @@ export const UseAgentStore = create((set, get) =>({
             }
         }
     },
+
+    deleteAgent: async(id) =>{
+        set({ isLoading: true });
+        try {
+            await axiosInstance.delete(`/agent/delete/${id}`);
+            set({ isLoading: false});
+            await get().getAllAgents();
+        } catch (error) {
+            console.log(error);
+            set({ isLoading: false });
+            if(error.response){
+                const msg = error.response?.data.message || 'Fail';
+                toast.error(msg)
+            }
+        }
+    }
 }))
