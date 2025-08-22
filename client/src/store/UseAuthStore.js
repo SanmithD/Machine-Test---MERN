@@ -3,69 +3,82 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axiosInstance";
 
 export const UseAuthStore = create((set) => ({
-  isLoading: false,
-  auth: null,
-  isAuthenticated: false,
+  authUser: null,
+  isCheckingAuth: false,
 
   login: async (data, navigate) => {
-    set({ isLoading: true });
+    set({ isCheckingAuth: true });
     try {
-      const response = await axiosInstance.post("/auth/login", data);
+      const res = await axiosInstance.post("/auth/login", data);
 
-      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("token", res.data.token);
 
       set({
-        isLoading: false,
-        isAuthenticated: true,
-        auth: response.data.user,
+        authUser: res.data.user,
+        isCheckingAuth: false,
       });
+
       navigate("/");
     } catch (error) {
-      console.log(error);
-      set({ isLoading: false });
+      console.error(error);
+      set({ isCheckingAuth: false });
+
       if (error.response) {
-        const msg = error.response.data?.message || "Login Failed";
-        toast.error(msg);
+        toast.error(error.response.data?.message || "Login failed");
       }
     }
   },
 
-  profile: async () => {
-    set({ isLoading: true });
+  checkAuth: async () => {
+    set({ isCheckingAuth: true });
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No token found");
 
-      const response = await axiosInstance.get("/auth/profile");
+      const res = await axiosInstance.get("/auth/profile");
+
       set({
-        isLoading: false,
-        isAuthenticated: true,
-        auth: response.data,
+        authUser: res.data,
+        isCheckingAuth: false,
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
       localStorage.removeItem("token");
-      set({ isLoading: false, isAuthenticated: false, auth: null });
-      if (error.response) {
-        const msg = error.response.data?.message || "Session expired";
-        toast.error(msg);
+
+      set({
+        authUser: null,
+        isCheckingAuth: false,
+      });
+
+      if (error.response && error.response.status !== 401) {
+        toast.error(error.response.data?.message || "Session expired");
       }
     }
   },
 
   logout: async (navigate) => {
-    set({ isLoading: true });
+    set({ isCheckingAuth: true });
     try {
       await axiosInstance.post("/auth/logout");
       localStorage.removeItem("token");
-      set({ isLoading: false, isAuthenticated: false, auth: null });
+
+      set({
+        authUser: null,
+        isCheckingAuth: false,
+      });
+
       navigate("/login");
     } catch (error) {
-      console.log(error);
-      set({ isLoading: false });
+      console.error(error);
+      localStorage.removeItem("token");
+
+      set({
+        authUser: null,
+        isCheckingAuth: false,
+      });
+
       if (error.response) {
-        const msg = error.response.data?.message || "Fail to logout";
-        toast.error(msg);
+        toast.error(error.response.data?.message || "Failed to logout");
       }
     }
   },

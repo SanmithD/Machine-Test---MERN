@@ -1,8 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "start": "nodemon src/index.js",
-    "seed": "node seedAdmin.js"
+    "start": "nodemon src/index.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
