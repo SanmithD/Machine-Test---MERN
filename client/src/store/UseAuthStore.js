@@ -5,6 +5,7 @@ import { axiosInstance } from "../lib/axiosInstance";
 export const UseAuthStore = create((set) => ({
   authUser: null,
   isCheckingAuth: false,
+  authError: null,
 
   login: async (data, navigate) => {
     set({ isCheckingAuth: true });
@@ -29,30 +30,31 @@ export const UseAuthStore = create((set) => ({
     }
   },
 
+  clearAuthError: () => set({ authError: null }),
+
   checkAuth: async () => {
-    set({ isCheckingAuth: true });
+    set({ isCheckingAuth: true, authError: null });
     try {
       const token = localStorage.getItem("token");
-      if (!token) throw new Error("No token found");
+      if (!token) {
+        set({ authUser: null, isCheckingAuth: false });
+        return;
+      }
 
       const res = await axiosInstance.get("/auth/profile");
-
       set({
         authUser: res.data,
         isCheckingAuth: false,
+        authError: null
       });
     } catch (error) {
       console.error(error);
       localStorage.removeItem("token");
-
       set({
         authUser: null,
         isCheckingAuth: false,
+        authError: error.response?.data?.message || "Authentication failed"
       });
-
-      if (error.response && error.response.status !== 401) {
-        toast.error(error.response.data?.message || "Session expired");
-      }
     }
   },
 

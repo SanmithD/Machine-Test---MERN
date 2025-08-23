@@ -70,7 +70,6 @@ function Login() {
               </div>
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={isLoading}

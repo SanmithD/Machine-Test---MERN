@@ -1,35 +1,22 @@
 import jwt from 'jsonwebtoken';
 import { userModel } from '../models/user.model.js';
+import { Response } from '../utils/response.util.js';
 
 export const protectRoute = async(req, res, next) =>{
     try {
         const token = req.cookies.jwt;
-        if(!token){
-            return res.status(400).json({
-                success: false,
-                message: "Unauthorized"
-            });
-        }
+        if(!token) return Response(403, false, 'Unauthorized', res);
+
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        if(!decoded){
-            return res.status(400).json({
-                success: false,
-                message: "Invalid token"
-            });
-        }
+        if(!decoded) return Response(400, false, 'Invalid token', res);
+
         const user = await userModel.findById(decoded.userId).select("-password");
-        if(!user){
-            return res.status(404).json({
-                success: false,
-                message: "User not found"
-            });
-        }
+        if(!user) return Response(404, false, 'Not found', res);
+
         req.user = user;
         next();
     } catch (error) {
-        res.status(500).json({
-                success: false,
-                message: "Server error"
-            });
+        console.log(error);
+        return Response(500, false, 'Server error', res)
     }
 }
