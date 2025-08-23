@@ -6,6 +6,8 @@ Styled with **TailwindCSS** + **DaisyUI**, and state management handled via **Zu
 ---
 # Live link
 
+https://machine-test-mern-dxbc.vercel.app
+
 ## 📂 Project Folder Structure  
 
 ```bash
