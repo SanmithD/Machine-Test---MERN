@@ -19,7 +19,7 @@ const app = express();
 const PORT = process.env.PORT || 5050;
 
 app.use(cors({
-    origin: ['https://machine-test-mern-dxbc.vercel.app','http://localhost:5173'],
+    origin: ['https://machine-test-mern-dxbc.vercel.app'],
     methods: "GET,POST,PUT,DELETE,PATCH",
     credentials: true
 }));
