@@ -29,7 +29,7 @@ function UploadList() {
         onChange={handleFileChange}
         className="file-input file-input-bordered w-full max-w-xs"
       />
-
+      <p className="text-gray-500 font-medium" >Max 5mb file</p>
       <button
         onClick={handleUpload}
         disabled={isLoading}
