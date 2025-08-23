@@ -14,6 +14,7 @@ export const UseAgentStore = create((set, get) =>({
             await get().getAllAgents();
             toast.success("New Agent Added")
         } catch (error) {
+            await get().getAllAgents();
             console.log(error);
             if(error.response){
                 const msg = error.response?.data.message || 'Fail to add';

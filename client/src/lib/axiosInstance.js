@@ -1,6 +1,6 @@
 import axios from 'axios';
 
 export const axiosInstance = axios.create({
-    baseURL: 'http://localhost:5050/api',
+    baseURL: 'https://machine-test-mern.onrender.com/api',
     withCredentials: true
 });
